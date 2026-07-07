@@ -1,204 +1,282 @@
-/* Custom Design Variable Definitions for Your Scrapbook Palette */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
 :root {
-    --color-sage: #9caf88;
-    --color-sage-light: #e2e8dd;
-    --color-lavender: #b1a2ca;
-    --color-lavender-light: #ece8f1;
-    --color-pink: #e3a7c0;
-    --color-pink-light: #f6e8ee;
-    --color-cream: #fbf9f4;
-    --color-charcoal: #1e293b;
+  --sage: #A7B89E;
+  --sage-light: #D2DDD0;
+  --cream: #FCFAF6;
+  --cream-dark: #F3EEE3;
+  --pink: #EBD6CD;
+  --pink-dark: #D7B9AE;
+  --purple: #E0D6E9;
+  --purple-dark: #C4B2D3;
+  --charcoal: #1E1E1E;
+  --border-width: 3px;
 }
-
-/* Base Body Styling with Artistic Paper Grain Simulation Texture */
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+  border-left: var(--border-width) solid var(--charcoal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pink);
+  border: var(--border-width) solid var(--charcoal);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pink-dark);
+}
 body {
-    margin: 0;
-    background-color: var(--color-cream);
-    background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
-    background-size: 4px 4px;
-    color: var(--color-charcoal);
-    font-family: 'Space Mono', monospace;
-    overflow: hidden;
-    height: 100vh;
+  font-family: 'Space Mono', monospace;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
 }
-
-/* System Top Status/Menu Bar Styling */
-.os-menu-bar {
-    height: 32px;
-    background: #ffffff;
-    border-bottom: 2px solid var(--color-charcoal);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
-    font-size: 13px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
-}
-
-.lang-btn {
-    border: 1px solid var(--color-charcoal);
-    padding: 2px 8px;
-    border-radius: 4px;
-    background: var(--color-cream);
-    cursor: pointer;
-    transition: all 0.15s ease;
-}
-
-.lang-btn:hover {
-    background: var(--color-charcoal);
-    color: #ffffff;
-}
-
-/* Main Interactive Desktop Stage Area */
-.desktop-environment {
-    margin-top: 32px;
-    height: calc(100vh - 32px);
-    position: relative;
-    padding: 24px;
-}
-
-/* Folder Navigation Grid (Sommaire Menu Style) */
-.desktop-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 24px;
-    max-width: 400px;
-}
-
-.desktop-icon-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: none;
-}
-
-.icon-folder {
-    width: 64px;
-    height: 48px;
-    border: 2px solid var(--color-charcoal);
-    border-radius: 4px;
-    position: relative;
-    box-shadow: 3px 3px 0px var(--color-charcoal);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* The Little Floating Tab On Top of Folder Icons */
-.icon-folder::before {
-    content: '';
-    width: 24px;
-    height: 8px;
-    background: inherit;
-    border: 2px solid var(--color-charcoal);
-    border-bottom: none;
-    position: absolute;
-    top: -9px;
-    left: -2px;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.bg-sage { background-color: var(--color-sage); }
-.bg-lavender { background-color: var(--color-lavender); }
-.bg-pink { background-color: var(--color-pink); }
-
-.bg-sage-light { background-color: var(--color-sage-light); }
-.bg-lavender-light { background-color: var(--color-lavender-light); }
-.bg-pink-light { background-color: var(--color-pink-light); }
-
-.desktop-icon-wrapper:hover .icon-folder {
-    transform: scale(1.08) translateY(-4px);
-}
-
-.icon-label {
-    font-size: 11px;
-    font-weight: bold;
-    margin-top: 8px;
-    text-align: center;
-    background: #ffffff;
-    padding: 2px 6px;
-    border: 1px solid var(--color-charcoal);
-    box-shadow: 1px 1px 0px var(--color-charcoal);
-}
-
-/* Custom Editorial Window Container Containers */
-.os-window {
-    position: absolute;
-    top: 10%;
-    left: 5%;
-    width: 90%;
-    max-width: 700px;
-    background: #ffffff;
-    border: 2px solid var(--color-charcoal);
-    border-radius: 6px;
-    box-shadow: 6px 6px 0px var(--color-charcoal);
-    overflow: hidden;
-}
-
-.window-header {
-    height: 36px;
-    border-bottom: 2px solid var(--color-charcoal);
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    position: relative;
-}
-
-.window-controls {
-    display: flex;
-    space-x: 6px;
-    gap: 6px;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1px solid var(--color-charcoal);
-}
-
-.dot-close { background-color: #ff5f56; cursor: pointer; }
-.dot-min { background-color: #ffbd2e; }
-.dot-max { background-color: #27c93f; }
-
-.window-title {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.window-content {
-    background-color: #ffffff;
-}
-
-/* Tactile Editorial Scrapbook & Polaroid Photo Framing Elements */
-.polaroid-frame {
-    background: #ffffff;
-    padding: 12px 12px 24px 12px;
-    border: 2px solid var(--color-charcoal);
-    width: 240px;
-    background-image: linear-gradient(rgba(0,0,0,0.01) 1px, transparent 0);
-}
-
-.zine-card {
-    transition: transform 0.2s ease;
-    background-image: linear-gradient(to bottom right, #ffffff, var(--color-cream));
-}
-
-.zine-card:hover {
-    transform: scale(1.03) rotate(0deg) !important;
-    z-index: 20;
-}
-
-/* Custom Tailwind Utility Overrides to Maintain Zine Hierarchy */
+/* Fonts styling */
 .font-serif {
-    font-family: 'Playfair Display', serif;
+  font-family: 'Playfair Display', serif;
 }
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+.font-mono {
+  font-family: 'Space Mono', monospace;
+}
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+/* Paper noise texture */
+.bg-grain {
+  background-color: var(--cream);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+}
+/* Halftone pattern overlay */
+.bg-halftone {
+  background-image: radial-gradient(rgba(30, 30, 30, 0.15) 1.5px, transparent 1.5px);
+  background-size: 8px 8px;
+}
+/* Tactile Border & Shadow utilities */
+.border-retro {
+  border: var(--border-width) solid var(--charcoal);
+}
+.shadow-retro {
+  box-shadow: 6px 6px 0px var(--charcoal);
+}
+.shadow-retro-sm {
+  box-shadow: 3px 3px 0px var(--charcoal);
+}
+.shadow-retro-lg {
+  box-shadow: 12px 12px 0px var(--charcoal);
+}
+.shadow-retro-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.shadow-retro-hover:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px var(--charcoal);
+}
+.shadow-retro-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px var(--charcoal);
+}
+/* Desktop Icon Layout */
+.desktop-icon {
+  width: 100px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+.desktop-icon:hover {
+  transform: scale(1.05);
+}
+.desktop-icon:active {
+  transform: scale(0.95);
+}
+/* Draggable Windows */
+.window {
+  position: absolute;
+  min-width: 320px;
+  max-width: 95vw;
+  background: var(--cream);
+  border: var(--border-width) solid var(--charcoal);
+  box-shadow: 8px 8px 0px var(--charcoal);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+.window.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.window.focused {
+  z-index: 50;
+  box-shadow: 12px 12px 0px var(--charcoal);
+}
+.window-header {
+  background: var(--sage);
+  border-bottom: var(--border-width) solid var(--charcoal);
+  cursor: grab;
+  user-select: none;
+}
+.window-header:active {
+  cursor: grabbing;
+}
+/* Window buttons */
+.window-btn {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--charcoal);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+.window-btn-close { background: #FF5F56; }
+.window-btn-close:hover { background: #E0433C; }
+.window-btn-min { background: #FFBD2E; }
+.window-btn-min:hover { background: #DE9E16; }
+.window-btn-max { background: #27C93F; }
+.window-btn-max:hover { background: #1A9C2C; }
+/* Custom cursor style */
+.custom-cursor-grab {
+  cursor: grab;
+}
+.custom-cursor-grab:active {
+  cursor: grabbing;
+}
+/* Tactile Scrapbook Elements */
+.polaroid {
+  background: #FFFFFF;
+  border: 2px solid var(--charcoal);
+  box-shadow: 5px 5px 0px var(--charcoal);
+  padding: 12px 12px 32px 12px;
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease, z-index 0.3s ease;
+}
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05) !important;
+  z-index: 60;
+  box-shadow: 8px 8px 0px var(--charcoal);
+}
+.tape {
+  position: absolute;
+  background: rgba(246, 241, 225, 0.75);
+  backdrop-filter: blur(1px);
+  border-left: 1px dashed rgba(0, 0, 0, 0.15);
+  border-right: 1px dashed rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 4px 18px;
+  z-index: 10;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(30, 30, 30, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tape-top {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+}
+.tape-angle-left {
+  top: -10px;
+  left: -15px;
+  transform: rotate(-35deg);
+}
+.tape-angle-right {
+  top: -10px;
+  right: -15px;
+  transform: rotate(35deg);
+}
+/* Sticky note style */
+.sticky-note {
+  background: var(--purple);
+  border: var(--border-width) solid var(--charcoal);
+  box-shadow: 5px 5px 0px var(--charcoal);
+  padding: 16px;
+  position: relative;
+  transform: rotate(1deg);
+}
+/* Zine Marker Highlight Effect */
+.marker-highlight {
+  position: relative;
+  z-index: 1;
+}
+.marker-highlight::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: 0px;
+  width: calc(100% + 4px);
+  height: 55%;
+  background-color: var(--pink);
+  z-index: -1;
+  opacity: 0.75;
+  transform: skewX(-6deg);
+}
+.marker-highlight-purple::after {
+  background-color: var(--purple);
+}
+.marker-highlight-sage::after {
+  background-color: var(--sage-light);
+}
+/* Distressed/Rough paper edge lines using SVG borders or dashes */
+.dashed-outline {
+  border: 2px dashed var(--charcoal);
+}
+/* Maximize window animation class overrides */
+.window.maximized {
+  top: 10px !important;
+  left: 10px !important;
+  width: calc(100vw - 20px) !important;
+  height: calc(100vh - 75px) !important;
+  max-width: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Folder folder grid */
+.folder-label {
+  word-break: break-word;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.2;
+}
+/* Custom Animations */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(1deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
+  100% { transform: translateY(0px) rotate(1deg); }
+}
+.float-effect {
+  animation: float 5s ease-in-out infinite;
+}
+/* Vector Star Rotation */
+@keyframes rotateStar {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.spin-star {
+  animation: rotateStar 10s linear infinite;
+}
+/* Responsive grid layouts */
+@media (max-width: 768px) {
+  .window {
+    min-width: 90vw !important;
+    max-width: 95vw !important;
+    left: 2.5vw !important;
+    width: 95vw !important;
+  }
+}
+
+
+
+
