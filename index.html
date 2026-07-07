@@ -1,1112 +1,242 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LAURA GARCON | Interactive Retro Zine & Fashion Portfolio</title>
-  
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Explore the digital atelier of Laura Garcon—a tactile, interactive retro OS portfolio blending fashion design, zine aesthetics, and multi-disciplinary curation.">
-  <meta name="keywords" content="Fashion Design, Graphic Design, Art Direction, Retro OS, Scrapbook Portfolio, Vanilla JS, Tailwind CSS">
-  <meta name="author" content="Laura Garcon">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            sage: '#A7B89E',
-            sagelight: '#D2DDD0',
-            cream: '#FCFAF6',
-            creamdark: '#F3EEE3',
-            pink: '#EBD6CD',
-            pinkdark: '#D7B9AE',
-            purple: '#E0D6E9',
-            purpledark: '#C4B2D3',
-            charcoal: '#1E1E1E',
-            hotpink: '#F43F5E'
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Custom Styles (Single File Integration) -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
-
-    :root {
-      --sage: #A7B89E;
-      --sage-light: #D2DDD0;
-      --cream: #FCFAF6;
-      --cream-dark: #F3EEE3;
-      --pink: #EBD6CD;
-      --pink-dark: #D7B9AE;
-      --purple: #E0D6E9;
-      --purple-dark: #C4B2D3;
-      --charcoal: #1E1E1E;
-      --border-width: 3px;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--cream-dark);
-      border-left: var(--border-width) solid var(--charcoal);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--pink);
-      border: var(--border-width) solid var(--charcoal);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--pink-dark);
-    }
-
-    body {
-      font-family: 'Space Mono', monospace;
-      background-color: var(--cream);
-      color: var(--charcoal);
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      width: 100vw;
-    }
-
-    /* Fonts styling */
-    .font-serif {
-      font-family: 'Playfair Display', serif;
-    }
-
-    .font-syne {
-      font-family: 'Syne', sans-serif;
-    }
-
-    .font-mono {
-      font-family: 'Space Mono', monospace;
-    }
-
-    .font-handwriting {
-      font-family: 'Caveat', cursive;
-    }
-
-    /* Paper noise texture */
-    .bg-grain {
-      background-color: var(--cream);
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-    }
-
-    /* Halftone pattern overlay */
-    .bg-halftone {
-      background-image: radial-gradient(rgba(30, 30, 30, 0.15) 1.5px, transparent 1.5px);
-      background-size: 8px 8px;
-    }
-
-    /* Tactile Border & Shadow utilities */
-    .border-retro {
-      border: var(--border-width) solid var(--charcoal);
-    }
-
-    .shadow-retro {
-      box-shadow: 6px 6px 0px var(--charcoal);
-    }
-
-    .shadow-retro-sm {
-      box-shadow: 3px 3px 0px var(--charcoal);
-    }
-
-    .shadow-retro-lg {
-      box-shadow: 12px 12px 0px var(--charcoal);
-    }
-
-    .shadow-retro-hover {
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .shadow-retro-hover:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: 9px 9px 0px var(--charcoal);
-    }
-    .shadow-retro-hover:active {
-      transform: translate(2px, 2px);
-      box-shadow: 4px 4px 0px var(--charcoal);
-    }
-
-    /* Desktop Icon Layout */
-    .desktop-icon {
-      width: 90px;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.1s ease;
-    }
-    .desktop-icon:hover {
-      transform: scale(1.05);
-    }
-    .desktop-icon:active {
-      transform: scale(0.95);
-    }
-
-    /* Draggable Windows */
-    .window {
-      position: absolute;
-      min-width: 320px;
-      max-width: 95vw;
-      background: var(--cream);
-      border: var(--border-width) solid var(--charcoal);
-      box-shadow: 8px 8px 0px var(--charcoal);
-      display: flex;
-      flex-direction: column;
-      opacity: 0;
-      transform: scale(0.95);
-      pointer-events: none;
-      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 10;
-    }
-
-    .window.active {
-      opacity: 1;
-      transform: scale(1);
-      pointer-events: auto;
-    }
-
-    .window.focused {
-      z-index: 50;
-      box-shadow: 12px 12px 0px var(--charcoal);
-    }
-
-    .window-header {
-      background: var(--sage);
-      border-bottom: var(--border-width) solid var(--charcoal);
-      cursor: grab;
-      user-select: none;
-    }
-    .window-header:active {
-      cursor: grabbing;
-    }
-
-    /* Window buttons */
-    .window-btn {
-      width: 14px;
-      height: 14px;
-      border: 2px solid var(--charcoal);
-      border-radius: 9999px;
-      cursor: pointer;
-      transition: background-color 0.1s ease;
-    }
-    .window-btn-close { background: #FF5F56; }
-    .window-btn-close:hover { background: #E0433C; }
-    .window-btn-min { background: #FFBD2E; }
-    .window-btn-min:hover { background: #DE9E16; }
-    .window-btn-max { background: #27C93F; }
-    .window-btn-max:hover { background: #1A9C2C; }
-
-    /* Custom cursor style */
-    .custom-cursor-grab {
-      cursor: grab;
-    }
-    .custom-cursor-grab:active {
-      cursor: grabbing;
-    }
-
-    /* Tactile Scrapbook Elements */
-    .polaroid {
-      background: #FFFFFF;
-      border: 2px solid var(--charcoal);
-      box-shadow: 5px 5px 0px var(--charcoal);
-      padding: 12px 12px 32px 12px;
-      display: inline-block;
-      position: relative;
-      transition: transform 0.3s ease, z-index 0.3s ease;
-    }
-    .polaroid:hover {
-      transform: rotate(0deg) scale(1.05) !important;
-      z-index: 60;
-      box-shadow: 8px 8px 0px var(--charcoal);
-    }
-
-    .tape {
-      position: absolute;
-      background: rgba(246, 241, 225, 0.75);
-      backdrop-filter: blur(1px);
-      border-left: 1px dashed rgba(0, 0, 0, 0.15);
-      border-right: 1px dashed rgba(0, 0, 0, 0.15);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      padding: 4px 18px;
-      z-index: 10;
-      font-family: 'Space Mono', monospace;
-      font-size: 9px;
-      color: rgba(30, 30, 30, 0.7);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .tape-top {
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%) rotate(-1deg);
-    }
-    .tape-angle-left {
-      top: -10px;
-      left: -15px;
-      transform: rotate(-35deg);
-    }
-    .tape-angle-right {
-      top: -10px;
-      right: -15px;
-      transform: rotate(35deg);
-    }
-
-    /* Sticky note style */
-    .sticky-note {
-      background: var(--purple);
-      border: var(--border-width) solid var(--charcoal);
-      box-shadow: 5px 5px 0px var(--charcoal);
-      padding: 16px;
-      position: relative;
-      transform: rotate(1deg);
-    }
-
-    /* Zine Marker Highlight Effect */
-    .marker-highlight {
-      position: relative;
-      z-index: 1;
-    }
-    .marker-highlight::after {
-      content: "";
-      position: absolute;
-      left: -2px;
-      bottom: 0px;
-      width: calc(100% + 4px);
-      height: 55%;
-      background-color: var(--pink);
-      z-index: -1;
-      opacity: 0.75;
-      transform: skewX(-6deg);
-    }
-    .marker-highlight-purple::after {
-      background-color: var(--purple);
-    }
-    .marker-highlight-sage::after {
-      background-color: var(--sage-light);
-    }
-
-    /* Distressed/Rough paper edge lines using SVG borders or dashes */
-    .dashed-outline {
-      border: 2px dashed var(--charcoal);
-    }
-
-    /* Maximize window animation class overrides */
-    .window.maximized {
-      top: 10px !important;
-      left: 10px !important;
-      width: calc(100vw - 20px) !important;
-      height: calc(100vh - 75px) !important;
-      max-width: none !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Folder folder grid */
-    .folder-label {
-      word-break: break-word;
-      text-align: center;
-      font-size: 11px;
-      line-height: 1.2;
-    }
-
-    /* Custom Animations */
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(1deg); }
-      50% { transform: translateY(-5px) rotate(-1deg); }
-      100% { transform: translateY(0px) rotate(1deg); }
-    }
-    .float-effect {
-      animation: float 5s ease-in-out infinite;
-    }
-
-    /* Vector Star Rotation */
-    @keyframes rotateStar {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .spin-star {
-      animation: rotateStar 10s linear infinite;
-    }
-
-    /* Responsive grid layouts */
-    @media (max-width: 768px) {
-      .window {
-        min-width: 90vw !important;
-        max-width: 95vw !important;
-        left: 2.5vw !important;
-        width: 95vw !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laura Garçon — Portfolio</title>
+    <!-- Tailwind CSS for structural grid layouts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Expressive editorial serif & clean UI mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&family=Syne:wght@700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Linking directly to your separate style sheet -->
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-grain bg-halftone select-none">
+<body>
 
-  <!-- Desktop Environment -->
-  <div id="desktop" class="relative w-screen h-screen p-4 md:p-8 flex flex-col justify-between overflow-hidden">
-    
-    <!-- Top Bar / Zine Masthead -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between border-retro shadow-retro bg-cream p-4 z-10 select-none">
-      <div class="flex items-center space-x-4">
-        <span class="font-syne font-extrabold text-2xl tracking-wider text-charcoal uppercase flex items-center gap-2">
-          LAURA GARCON
-          <!-- Vector Star -->
-          <svg class="w-5 h-5 text-hotpink spin-star" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z" />
-          </svg>
-        </span>
-        <span class="hidden md:inline-block border-l-2 border-charcoal h-6"></span>
-        <span class="font-mono text-xs uppercase tracking-widest text-charcoal opacity-75">
-          ATELIER & DIGITAL ARCHIVE // EDITORIAL SCRAPBOOK
-        </span>
-      </div>
-      <div class="mt-2 md:mt-0 flex items-center space-x-2 text-xs font-mono uppercase bg-purple px-3 py-1 border-2 border-charcoal shadow-retro-sm">
-        <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
-        <span>Aesthetic Index: Gilded</span>
-      </div>
-    </header>
+    <!-- Retro OS Top Menu Bar -->
+    <div class="os-menu-bar">
+        <div class="flex items-center space-x-4">
+            <span class="font-bold tracking-wider">LAURA_OS v1.0</span>
+            <span class="hidden md:inline-block opacity-60">|</span>
+            <span class="hidden md:inline-block opacity-60" id="current-section-title">Welcome to my world</span>
+        </div>
+        <!-- The Bilingual Language Toggle Button -->
+        <button id="lang-toggle" onclick="toggleLanguage()" class="lang-btn">
+            <span class="font-bold">FR</span> <span class="opacity-40">|</span> EN
+        </button>
+    </div>
 
-    <!-- Desktop Icons & Interactive Layout Grid -->
-    <main class="flex-grow w-full relative py-6 flex flex-col md:flex-row items-start md:space-x-8">
-      
-      <!-- Desktop Icons Column -->
-      <div class="grid grid-cols-2 md:grid-cols-1 gap-6 md:gap-8 z-10">
+    <!-- Main Interactive Desktop Area -->
+    <main class="desktop-environment">
         
-        <!-- About Icon -->
-        <div onclick="openWindow('window-about')" class="desktop-icon flex flex-col items-center group">
-          <div class="w-16 h-16 bg-purple border-retro shadow-retro flex items-center justify-center transition-all duration-150 group-hover:-translate-y-1 group-hover:shadow-retro-lg">
-            <!-- Retro Folder SVG -->
-            <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-            </svg>
-          </div>
-          <span class="mt-2 font-mono text-xs font-bold text-charcoal bg-cream px-2 py-0.5 border-2 border-charcoal shadow-retro-sm">
-            about_me.txt
-          </span>
+        <!-- Grid of Zine/OS Desktop Icons (Sommaire) -->
+        <div class="desktop-grid">
+            <button class="desktop-icon-wrapper" onclick="openWindow('about-win')">
+                <div class="icon-folder bg-sage"></div>
+                <span class="icon-label" data-key="menu-about">À Propos</span>
+            </button>
+
+            <button class="desktop-icon-wrapper" onclick="openWindow('fashion-win')">
+                <div class="icon-folder bg-lavender"></div>
+                <span class="icon-label" data-key="menu-fashion">Mode & Collections</span>
+            </button>
+
+            <button class="desktop-icon-wrapper" onclick="openWindow('universe-win')">
+                <div class="icon-folder bg-pink"></div>
+                <span class="icon-label" data-key="menu-universe">Univers Personnel</span>
+            </button>
         </div>
 
-        <!-- Fashion Portfolio Icon -->
-        <div onclick="openWindow('window-portfolio')" class="desktop-icon flex flex-col items-center group">
-          <div class="w-16 h-16 bg-sage border-retro shadow-retro flex items-center justify-center transition-all duration-150 group-hover:-translate-y-1 group-hover:shadow-retro-lg">
-            <!-- Retro Hanger/Sketch SVG -->
-            <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-            </svg>
-          </div>
-          <span class="mt-2 font-mono text-xs font-bold text-charcoal bg-cream px-2 py-0.5 border-2 border-charcoal shadow-retro-sm">
-            fashion_work.dxf
-          </span>
+        <!-- 1. À PROPOS POP-UP WINDOW -->
+        <div id="about-win" class="os-window hidden">
+            <div class="window-header bg-sage-light">
+                <div class="window-controls">
+                    <button class="dot dot-close" onclick="closeWindow('about-win')"></button>
+                    <button class="dot dot-min"></button>
+                    <button class="dot dot-max"></button>
+                </div>
+                <span class="window-title font-mono" data-key="title-about">about_me.txt</span>
+            </div>
+            <div class="window-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-serif font-bold text-slate-800" data-key="heading-about">Laura Garçon</h2>
+                    <p class="font-sans text-slate-600 leading-relaxed" data-key="bio-p1">
+                        Après un double diplôme en relations internationales, j'ai choisi de suivre ma véritable passion : le design de mode. Mon parcours m'a menée de la France à Florence, en passant par la Corée du Sud.
+                    </p>
+                    <p class="font-sans text-slate-600 leading-relaxed" data-key="bio-p2">
+                        Ce portfolio reflète mon univers en constante évolution, mêlant structure technique et sensibilité artistique, une création à la fois.
+                    </p>
+                </div>
+                <!-- Layered Scrapbook Collage Style Image Block -->
+                <div class="relative flex justify-center items-center py-6">
+                    <div class="polaroid-frame rotate-2 shadow-md">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Laura" class="w-full h-48 object-cover">
+                        <p class="font-serif italic text-center text-sm mt-2">Laura G. (Nancy, 2026)</p>
+                    </div>
+                    <div class="absolute -top-2 -left-2 vector-star text-pink-400 text-3xl">★</div>
+                </div>
+            </div>
         </div>
 
-        <!-- Personal Universe Icon -->
-        <div onclick="openWindow('window-universe')" class="desktop-icon flex flex-col items-center group">
-          <div class="w-16 h-16 bg-pink border-retro shadow-retro flex items-center justify-center transition-all duration-150 group-hover:-translate-y-1 group-hover:shadow-retro-lg">
-            <!-- Book/Zine SVG -->
-            <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <span class="mt-2 font-mono text-xs font-bold text-charcoal bg-cream px-2 py-0.5 border-2 border-charcoal shadow-retro-sm">
-            my_universe.zip
-          </span>
+        <!-- 2. MODE & FASHION POP-UP WINDOW -->
+        <div id="fashion-win" class="os-window hidden">
+            <div class="window-header bg-lavender-light">
+                <div class="window-controls">
+                    <button class="dot dot-close" onclick="closeWindow('fashion-win')"></button>
+                    <button class="dot dot-min"></button>
+                    <button class="dot dot-max"></button>
+                </div>
+                <span class="window-title font-mono" data-key="title-fashion">collections_archive.lnk</span>
+            </div>
+            <div class="window-content p-6 space-y-8 max-h-[75vh] overflow-y-auto">
+                <h2 class="text-4xl font-serif font-bold text-center border-b pb-4 mb-4" data-key="heading-fashion">Projets Mode</h2>
+                
+                <!-- Dior Project Panel -->
+                <div class="border-2 border-slate-800 p-4 rounded bg-white relative">
+                    <h3 class="text-xl font-mono font-bold mb-2">01 / Costumes Dior</h3>
+                    <p class="text-slate-600 mb-4 text-sm" data-key="desc-dior">Une collection capsule androgynne brouillant les frontières du genre, inspirée par l'élégance intemporelle de Dior et une vision contemporaine de l'identité.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm skew-x-1">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm -rotate-2">
+                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm rotate-1">
+                        <img src="https://images.unsplash.com/photo-1445205170230-053b830c6038?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm">
+                    </div>
+                </div>
+
+                <!-- MET Gala & Structure Project Panel -->
+                <div class="border-2 border-slate-800 p-4 rounded bg-white relative">
+                    <h3 class="text-xl font-mono font-bold mb-2">02 / Structure & Flou</h3>
+                    <p class="text-slate-600 mb-4 text-sm" data-key="desc-structure">Exploration du vêtement comme architecture rigide d'un côté (inspiré des champignons), et comme flou psychologique et émotionnel déconstruit de l'autre.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative bg-cream-base p-2 border border-dashed border-slate-400">
+                            <span class="absolute top-1 left-1 text-xs font-mono opacity-50">[STRUCTURE]</span>
+                            <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=400&q=80" class="w-full h-40 object-cover mt-4">
+                        </div>
+                        <div class="relative bg-cream-base p-2 border border-dashed border-slate-400">
+                            <span class="absolute top-1 left-1 text-xs font-mono opacity-50">[FLOU]</span>
+                            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80" class="w-full h-40 object-cover mt-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Contact Icon -->
-        <div onclick="openWindow('window-contact')" class="desktop-icon flex flex-col items-center group">
-          <div class="w-16 h-16 bg-creamdark border-retro shadow-retro flex items-center justify-center transition-all duration-150 group-hover:-translate-y-1 group-hover:shadow-retro-lg">
-            <!-- Envelope SVG -->
-            <svg class="w-10 h-10 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 00-2 2z" />
-            </svg>
-          </div>
-          <span class="mt-2 font-mono text-xs font-bold text-charcoal bg-cream px-2 py-0.5 border-2 border-charcoal shadow-retro-sm">
-            say_hello.exe
-          </span>
+        <!-- 3. UNIVERS PERSONNEL POP-UP WINDOW -->
+        <div id="universe-win" class="os-window hidden">
+            <div class="window-header bg-pink-light">
+                <div class="window-controls">
+                    <button class="dot dot-close" onclick="closeWindow('universe-win')"></button>
+                    <button class="dot dot-min"></button>
+                    <button class="dot dot-max"></button>
+                </div>
+                <span class="window-title font-mono" data-key="title-universe">creative_universe.sys</span>
+            </div>
+            <div class="window-content p-6 space-y-6">
+                <h2 class="text-3xl font-serif font-bold text-center" data-key="heading-universe">Crochet, Craft & Médias</h2>
+                <p class="text-center text-slate-600 font-sans max-w-xl mx-auto" data-key="desc-universe">
+                    Au-delà de la mode académique, mon univers s'étend au fait-main, à la création textile expérimentale en crochet, et à la direction de contenu numérique.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+                    <div class="zine-card bg-white p-3 border-2 border-slate-800 rotate-1">
+                        <img src="https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
+                        <h4 class="font-bold font-serif text-center">Handmade Craft</h4>
+                    </div>
+                    <div class="zine-card bg-white p-3 border-2 border-slate-800 -rotate-1">
+                        <img src="https://images.unsplash.com/photo-1621600411688-4be93cc685e4?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
+                        <h4 class="font-bold font-serif text-center">Digital Content</h4>
+                    </div>
+                    <div class="zine-card bg-white p-3 border-2 border-slate-800 rotate-2">
+                        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
+                        <h4 class="font-bold font-serif text-center">Visual Identity</h4>
+                    </div>
+                </div>
+            </div>
         </div>
-
-      </div>
-
-      <!-- Tactile Scrapbook / Overlapping Graphics layer -->
-      <div class="hidden lg:block relative flex-grow h-full pointer-events-none select-none">
-        
-        <!-- Large Zine Heading Text Layered in Background -->
-        <div class="absolute top-4 left-1/4 opacity-10 uppercase select-none font-syne font-black text-[120px] leading-none text-charcoal pointer-events-none">
-          RIOT<br>FAILURE
-        </div>
-
-        <!-- Sticky Note: Tips -->
-        <div class="sticky-note absolute top-6 right-8 w-64 rotate-[3deg] float-effect pointer-events-auto cursor-default">
-          <div class="flex items-center justify-between border-b-2 border-charcoal pb-1 mb-2">
-            <span class="font-mono text-xs font-bold uppercase text-charcoal">ATELIER DIRECTIVE</span>
-            <span class="text-xs">📍</span>
-          </div>
-          <p class="font-handwriting text-2xl text-charcoal leading-tight">
-            Hi! Since you're new here, let me be ya tour guide. Click my folder files to explore.
-          </p>
-          <!-- Vector Star Mini -->
-          <svg class="absolute -bottom-3 -right-3 w-8 h-8 text-hotpink spin-star" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z" />
-          </svg>
-        </div>
-
-        <!-- Polaroid Background Pin -->
-        <div class="polaroid absolute bottom-20 left-20 rotate-[-5deg] w-48 float-effect pointer-events-auto cursor-default" style="animation-delay: -1.5s;">
-          <div class="tape tape-top">STACEY 2026</div>
-          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=400&auto=format&fit=crop" 
-               alt="Aesthetic Fashion Detail" class="w-full h-40 object-cover border-retro-sm grayscale contrast-125">
-          <p class="font-handwriting text-center text-xl mt-3 text-charcoal">Studio vibe check</p>
-        </div>
-
-        <!-- Distressed Purple Ribbon Layer -->
-        <div class="absolute bottom-12 right-24 rotate-[15deg] opacity-75 z-0 pointer-events-auto cursor-default">
-          <div class="bg-purple text-charcoal border-retro px-4 py-1.5 font-mono font-bold text-xs uppercase tracking-widest shadow-retro-sm">
-            ✦ VIBING WITH VISUALS ✦
-          </div>
-        </div>
-
-        <!-- Vector Star Graphic Overlay -->
-        <div class="absolute bottom-10 right-96 rotate-12 opacity-30">
-          <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.5" class="text-charcoal">
-            <path d="M50 0 L60 40 L100 50 L60 60 L50 100 L40 60 L0 50 L40 40 Z" fill="var(--pink)" />
-          </svg>
-        </div>
-
-      </div>
 
     </main>
 
-    <!-- WINDOW 1: À PROPOS (ABOUT) -->
-    <div id="window-about" class="window active" style="top: 10%; left: 18%; width: 720px;">
-      <div class="window-header flex items-center justify-between p-2">
-        <div class="flex items-center space-x-2">
-          <div onclick="closeWindow('window-about')" class="window-btn window-btn-close"></div>
-          <div onclick="minimizeWindow('window-about')" class="window-btn window-btn-min"></div>
-          <div onclick="toggleMaximize('window-about')" class="window-btn window-btn-max"></div>
-        </div>
-        <span class="font-mono text-xs font-bold uppercase tracking-wider text-charcoal select-none">
-          ABOUT_ME.TXT
-        </span>
-        <div class="w-14"></div>
-      </div>
-      
-      <div class="p-6 md:p-8 overflow-y-auto max-h-[70vh] bg-cream font-mono text-sm leading-relaxed relative">
-        <!-- Floating Sparkle -->
-        <div class="absolute top-4 right-4">
-          <svg class="w-8 h-8 text-purple spin-star" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z" />
-          </svg>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Text Column -->
-          <div>
-            <h2 class="font-syne font-black text-4xl uppercase tracking-tight text-charcoal mb-4">
-              THE <span class="marker-highlight marker-highlight-purple">CREATOR</span>
-            </h2>
-            <p class="text-charcoal mb-4">
-              I am Laura Garcon, a designer operating at the intersection of fashion sketches, tactile layout structures, and graphic layout.
-            </p>
-            <p class="text-charcoal mb-4">
-              I treat the digital canvas like an editorial scrapbook. Inspired by childhood music archives, distressed prints, and organic textures. 
-            </p>
-            <div class="bg-sagelight border-retro shadow-retro-sm p-4 mt-6">
-              <h3 class="font-bold text-xs uppercase mb-1">Curation Obsessions:</h3>
-              <ul class="list-disc list-inside text-xs space-y-1">
-                <li>Heavyweight cotton drapes</li>
-                <li>Purple oil-pastel scribbles</li>
-                <li>Tactile zines & print layout</li>
-                <li>Four-point vector stars</li>
-              </ul>
-            </div>
-          </div>
-          
-          <!-- Collage Column -->
-          <div class="flex flex-col items-center justify-center relative min-h-[300px]">
-            <!-- Polaroid Overlapped -->
-            <div class="polaroid rotate-[4deg] w-56 absolute z-10">
-              <div class="tape tape-angle-left">Studio Drape</div>
-              <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=400&auto=format&fit=crop" 
-                   alt="Draped fabric closeup" class="w-full h-44 object-cover border-retro-sm">
-              <p class="font-handwriting text-center text-xl mt-3 text-charcoal">Fibre and Tape</p>
-            </div>
-            
-            <div class="polaroid -rotate-[6deg] w-48 absolute top-6 left-2 z-0">
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=400&auto=format&fit=crop" 
-                   alt="Fashion model photoshoot" class="w-full h-36 object-cover border-retro-sm">
-              <p class="font-handwriting text-center text-lg mt-2 text-charcoal">Lookbook Snap</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- WINDOW 2: FASHION PORTFOLIO -->
-    <div id="window-portfolio" class="window" style="top: 6%; left: 16%; width: 850px;">
-      <div class="window-header flex items-center justify-between p-2">
-        <div class="flex items-center space-x-2">
-          <div onclick="closeWindow('window-portfolio')" class="window-btn window-btn-close"></div>
-          <div onclick="minimizeWindow('window-portfolio')" class="window-btn window-btn-min"></div>
-          <div onclick="toggleMaximize('window-portfolio')" class="window-btn window-btn-max"></div>
-        </div>
-        <span class="font-mono text-xs font-bold uppercase tracking-wider text-charcoal select-none">
-          FASHION_WORK.DXF
-        </span>
-        <div class="w-14"></div>
-      </div>
-      
-      <!-- Tabs Structure -->
-      <div class="flex border-b-3 border-charcoal bg-creamdark text-xs font-bold font-mono">
-        <button onclick="switchTab('dior')" id="tab-btn-dior" class="portfolio-tab px-6 py-3 border-r-3 border-charcoal bg-cream text-charcoal uppercase tracking-wider focus:outline-none">
-          Dior Costume Design
-        </button>
-        <button onclick="switchTab('met')" id="tab-btn-met" class="portfolio-tab px-6 py-3 border-r-3 border-charcoal bg-creamdark text-charcoal opacity-60 uppercase tracking-wider hover:opacity-100 focus:outline-none">
-          MET Gala 2025
-        </button>
-        <button onclick="switchTab('structure')" id="tab-btn-structure" class="portfolio-tab px-6 py-3 border-r-3 border-charcoal bg-creamdark text-charcoal opacity-60 uppercase tracking-wider hover:opacity-100 focus:outline-none">
-          Structure & Flou
-        </button>
-      </div>
-
-      <!-- Tab Content Area -->
-      <div class="p-6 md:p-8 overflow-y-auto max-h-[65vh] bg-cream">
-        
-        <!-- DIOR TAB CONTENT -->
-        <div id="tab-dior" class="portfolio-tab-content">
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-            <div class="md:col-span-3">
-              <h3 class="font-serif italic text-3xl md:text-4xl text-charcoal mb-4">
-                Historical Corsetry Re-imagined
-              </h3>
-              <p class="font-mono text-sm leading-relaxed text-charcoal mb-4">
-                A capsule collection exploring Christian Dior's mid-century silhouettes. The pieces reconstruct the iconic waistlines using sustainable raw hemp canvasing and lightweight flexible boning, highlighting comfort without sacrificing dramatic graphic lines.
-              </p>
-              <div class="grid grid-cols-2 gap-4 mt-6">
-                <div class="border-retro p-3 bg-purple">
-                  <span class="block font-mono text-xs font-extrabold uppercase text-charcoal">Silhouette</span>
-                  <span class="block font-serif text-lg text-charcoal">Structural Hourglass</span>
-                </div>
-                <div class="border-retro p-3 bg-sagelight">
-                  <span class="block font-mono text-xs font-extrabold uppercase text-charcoal">Materials</span>
-                  <span class="block font-serif text-lg text-charcoal">Raw Hemp & Tencel</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="md:col-span-2 flex flex-col items-center">
-              <div class="polaroid rotate-[2deg] w-full max-w-[280px]">
-                <div class="tape tape-angle-right">DIOR STUDY</div>
-                <img src="https://images.unsplash.com/photo-1551238258-40272def4741?q=80&w=400&auto=format&fit=crop" 
-                     alt="Dior studio costume design" class="w-full h-64 object-cover border-retro-sm">
-                <p class="font-handwriting text-center text-lg mt-3 text-charcoal">Historical Corset Mockup</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- MET GALA TAB CONTENT -->
-        <div id="tab-met" class="portfolio-tab-content hidden">
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-            <div class="md:col-span-7">
-              <h3 class="font-serif italic text-3xl md:text-4xl text-charcoal mb-4">
-                Met Gala: Gilded Botany
-              </h3>
-              <p class="font-mono text-sm leading-relaxed text-charcoal mb-4">
-                Concept design for the theme: "Gilded Botany." The garment utilizes organic linen treated with a customized liquid metallic lacquer to look like petrified golden flora. Hand-draped leaves cascade over structured metal scaffolding.
-              </p>
-              <div class="bg-pink border-retro shadow-retro-sm p-4 text-xs font-mono mb-4">
-                <p class="font-bold uppercase mb-2">Metrics & Specs:</p>
-                <div class="grid grid-cols-2 gap-2">
-                  <div>• 240+ Hours Hand Drape</div>
-                  <div>• 3 Custom Fabrications</div>
-                  <div>• Gold Leaf Overlay</div>
-                  <div>• Biodegradable Base</div>
-                </div>
-              </div>
-            </div>
-            <div class="md:col-span-5 flex justify-center">
-              <div class="polaroid -rotate-[3deg] w-full max-w-[280px]">
-                <div class="tape tape-top">GOLD LEAF DRAPE</div>
-                <img src="https://images.unsplash.com/photo-1507290439931-a8e02da93767?q=80&w=400&auto=format&fit=crop" 
-                     alt="Botanical detail drape" class="w-full h-64 object-cover border-retro-sm">
-                <p class="font-handwriting text-center text-lg mt-3 text-charcoal">Organic Metallic Leaves</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STRUCTURE & FLOU TAB CONTENT -->
-        <div id="tab-structure" class="portfolio-tab-content hidden">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 class="font-syne font-black text-2xl uppercase tracking-tight text-charcoal mb-4">
-                THE DIALECTIC OF <span class="marker-highlight marker-highlight-purple">DRAPE</span>
-              </h3>
-              <p class="font-mono text-sm leading-relaxed text-charcoal mb-4">
-                This ongoing research contrasts rigid tailorings (Structure) with fluid gather and flounce (Flou).
-              </p>
-              <div class="border-l-4 border-charcoal pl-4 my-6 italic text-charcoal font-serif">
-                "We drape to find freedom, we structure to find boundaries."
-              </div>
-              <p class="font-mono text-xs text-charcoal leading-relaxed">
-                By layering thick structured canvas jackets over sheer, featherlight silk chiffon skirts, we define a silhouette that shifts dramatically as the wearer moves in space.
-              </p>
-            </div>
-            <div class="relative min-h-[300px] flex items-center justify-center">
-              <div class="polaroid rotate-[3deg] w-56 absolute z-10">
-                <img src="https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400&auto=format&fit=crop" 
-                     alt="Yarn and textile structure" class="w-full h-44 object-cover border-retro-sm">
-                <p class="font-handwriting text-center text-lg mt-3 text-charcoal">Yarn & Canvas contrast</p>
-              </div>
-              <div class="polaroid -rotate-[6deg] w-48 absolute top-4 left-6 z-0">
-                <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=400&auto=format&fit=crop" 
-                     alt="Editorial Look" class="w-full h-36 object-cover border-retro-sm grayscale">
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- WINDOW 3: PERSONAL UNIVERSE & SOCIALS -->
-    <div id="window-universe" class="window" style="top: 12%; left: 20%; width: 750px;">
-      <div class="window-header flex items-center justify-between p-2">
-        <div class="flex items-center space-x-2">
-          <div onclick="closeWindow('window-universe')" class="window-btn window-btn-close"></div>
-          <div onclick="minimizeWindow('window-universe')" class="window-btn window-btn-min"></div>
-          <div onclick="toggleMaximize('window-universe')" class="window-btn window-btn-max"></div>
-        </div>
-        <span class="font-mono text-xs font-bold uppercase tracking-wider text-charcoal select-none">
-          MY_UNIVERSE.ZIP
-        </span>
-        <div class="w-14"></div>
-      </div>
-      
-      <div class="p-6 md:p-8 overflow-y-auto max-h-[70vh] bg-cream font-mono text-sm">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="font-syne font-black text-3xl uppercase tracking-tight text-charcoal">
-            PERSONAL <span class="marker-highlight marker-highlight-sage">UNIVERSE</span>
-          </h2>
-          <!-- Sparkle vector star -->
-          <svg class="w-8 h-8 text-pink spin-star" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z" />
-          </svg>
-        </div>
-        
-        <p class="text-charcoal mb-6 leading-relaxed">
-          Outside of professional costume design, my creative drive spills into textile manipulation, custom crochet patterns, and digital content creation.
-        </p>
-
-        <!-- Universe Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          
-          <!-- Card 1 -->
-          <div class="border-retro bg-pink p-4 shadow-retro-sm flex flex-col justify-between relative">
-            <div>
-              <span class="text-2xl">🧶</span>
-              <h4 class="font-bold text-xs uppercase tracking-wider mt-2 mb-1">Crochet Archive</h4>
-              <p class="text-xs text-charcoal leading-relaxed">
-                Handmade chunky knits, complex open-loop patterns, and visual recipe sheets for modular cardigans.
-              </p>
-            </div>
-            <div class="mt-4 border-t-2 border-charcoal pt-2 text-right">
-              <span class="text-xs font-bold text-charcoal">12 Patterns Released</span>
-            </div>
-          </div>
-
-          <!-- Card 2 -->
-          <div class="border-retro bg-purple p-4 shadow-retro-sm flex flex-col justify-between">
-            <div>
-              <span class="text-2xl">📸</span>
-              <h4 class="font-bold text-xs uppercase tracking-wider mt-2 mb-1">Visual Curation</h4>
-              <p class="text-xs text-charcoal leading-relaxed">
-                Creating narrative-driven digital aesthetics on moodboards, matching organic fibers with digital glitch details.
-              </p>
-            </div>
-            <div class="mt-4 border-t-2 border-charcoal pt-2 text-right">
-              <span class="text-xs font-bold text-charcoal">85K+ Combined Reach</span>
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="border-retro bg-sagelight p-4 shadow-retro-sm flex flex-col justify-between">
-            <div>
-              <span class="text-2xl">📐</span>
-              <h4 class="font-bold text-xs uppercase tracking-wider mt-2 mb-1">Zine Publishing</h4>
-              <p class="text-xs text-charcoal leading-relaxed">
-                Indie tactile design booklets combining textile sketches with raw technical specifications.
-              </p>
-            </div>
-            <div class="mt-4 border-t-2 border-charcoal pt-2 text-right">
-              <span class="text-xs font-bold text-charcoal">Issue #04 In Print</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Polaroid Showcase in Universe -->
-        <div class="border-retro bg-creamdark p-6 flex flex-col items-center relative">
-          <!-- Vector Star absolute -->
-          <svg class="absolute -top-4 -right-4 w-10 h-10 text-purple spin-star" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L14.8 9.2L22 12L14.8 14.8L12 22L9.2 14.8L2 12L9.2 9.2L12 2Z" />
-          </svg>
-          
-          <h4 class="font-bold text-xs uppercase tracking-wider text-center mb-4">Latest Crochet Lab Projects</h4>
-          <div class="flex flex-wrap justify-center gap-6">
-            <div class="polaroid rotate-[2deg] w-44">
-              <img src="https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=300&auto=format&fit=crop" 
-                   alt="Crochet stitch closeup" class="w-full h-32 object-cover border-retro-sm">
-              <p class="font-handwriting text-center text-sm mt-2 text-charcoal">Ribbed Loop Scarf</p>
-            </div>
-            <div class="polaroid -rotate-[3deg] w-44">
-              <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=300&auto=format&fit=crop" 
-                   alt="Wool details" class="w-full h-32 object-cover border-retro-sm">
-              <p class="font-handwriting text-center text-sm mt-2 text-charcoal">Sage Merino Mix</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- WINDOW 4: SAY HELLO (CONTACT) -->
-    <div id="window-contact" class="window" style="top: 15%; left: 24%; width: 560px;">
-      <div class="window-header flex items-center justify-between p-2">
-        <div class="flex items-center space-x-2">
-          <div onclick="closeWindow('window-contact')" class="window-btn window-btn-close"></div>
-          <div onclick="minimizeWindow('window-contact')" class="window-btn window-btn-min"></div>
-          <div onclick="toggleMaximize('window-contact')" class="window-btn window-btn-max"></div>
-        </div>
-        <span class="font-mono text-xs font-bold uppercase tracking-wider text-charcoal select-none">
-          SAY_HELLO.EXE
-        </span>
-        <div class="w-14"></div>
-      </div>
-      
-      <div class="p-6 md:p-8 overflow-y-auto max-h-[70vh] bg-cream font-mono text-sm">
-        <div class="border-retro bg-creamdark p-6 shadow-retro-sm relative">
-          <!-- Postcard Stamp Box -->
-          <div class="absolute top-4 right-4 w-16 h-20 border-retro border-dashed bg-pink flex flex-col items-center justify-center text-center">
-            <span class="text-xs font-bold">STAMP</span>
-            <span class="text-lg">🌸</span>
-          </div>
-          
-          <h2 class="font-serif italic text-3xl text-charcoal mb-4">
-            Hello, Stranger
-          </h2>
-          <p class="text-xs text-charcoal mb-6 pr-20 leading-relaxed">
-            Send a postcard straight to Laura's digital mailbox for collaboration, costume commissions, or pattern design queries.
-          </p>
-          
-          <!-- Postcard Form -->
-          <form onsubmit="handleFormSubmit(event)" class="space-y-4">
-            <div>
-              <label for="name" class="block text-xs font-bold uppercase mb-1">Your Name</label>
-              <input type="text" id="name" required class="w-full p-2 border-retro focus:outline-none focus:bg-white text-xs bg-cream">
-            </div>
-            <div>
-              <label for="email" class="block text-xs font-bold uppercase mb-1">Return Email</label>
-              <input type="email" id="email" required class="w-full p-2 border-retro focus:outline-none focus:bg-white text-xs bg-cream">
-            </div>
-            <div>
-              <label for="message" class="block text-xs font-bold uppercase mb-1">Message</label>
-              <textarea id="message" rows="4" required class="w-full p-2 border-retro focus:outline-none focus:bg-white text-xs bg-cream resize-none"></textarea>
-            </div>
-            <button type="submit" class="w-full py-3 bg-sage text-charcoal font-bold uppercase border-retro shadow-retro shadow-retro-hover text-xs">
-              Send Postcard
-            </button>
-          </form>
-        </div>
-        
-        <!-- Social Connections -->
-        <div class="mt-6 flex justify-around gap-2">
-          <a href="https://instagram.com" target="_blank" class="flex-grow text-center py-2 border-retro bg-purple text-xs font-bold shadow-retro-sm shadow-retro-hover">
-            INSTAGRAM
-          </a>
-          <a href="https://pinterest.com" target="_blank" class="flex-grow text-center py-2 border-retro bg-pink text-xs font-bold shadow-retro-sm shadow-retro-hover">
-            PINTEREST
-          </a>
-          <a href="https://behance.net" target="_blank" class="flex-grow text-center py-2 border-retro bg-sagelight text-xs font-bold shadow-retro-sm shadow-retro-hover">
-            BEHANCE
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Retro Taskbar / Footer -->
-    <footer class="w-full border-retro shadow-retro bg-cream p-2 flex items-center justify-between z-50 select-none">
-      
-      <!-- Start / Sommaire Trigger -->
-      <div class="relative">
-        <button id="menu-btn" onclick="toggleMenu()" class="px-4 py-1.5 bg-sage text-charcoal border-retro font-mono text-xs font-bold tracking-wider shadow-retro-sm shadow-retro-hover flex items-center space-x-1 uppercase focus:outline-none">
-          <span>📓</span>
-          <span>Sommaire</span>
-        </button>
-        
-        <!-- Retro Sommaire Popup Menu -->
-        <div id="start-menu" class="absolute bottom-12 left-0 w-56 bg-cream border-retro shadow-retro flex flex-col hidden z-50">
-          <div class="bg-charcoal text-cream font-mono text-xs uppercase p-2 tracking-widest text-center">
-            Archive Index
-          </div>
-          <button onclick="menuOpenWindow('window-about')" class="w-full text-left p-3 font-mono text-xs hover:bg-purple border-b-2 border-charcoal flex items-center space-x-2">
-            <span>👤</span> <span>about_me.txt</span>
-          </button>
-          <button onclick="menuOpenWindow('window-portfolio')" class="w-full text-left p-3 font-mono text-xs hover:bg-sage border-b-2 border-charcoal flex items-center space-x-2">
-            <span>👗</span> <span>fashion_work.dxf</span>
-          </button>
-          <button onclick="menuOpenWindow('window-universe')" class="w-full text-left p-3 font-mono text-xs hover:bg-pink border-b-2 border-charcoal flex items-center space-x-2">
-            <span>🧶</span> <span>my_universe.zip</span>
-          </button>
-          <button onclick="menuOpenWindow('window-contact')" class="w-full text-left p-3 font-mono text-xs hover:bg-creamdark border-b-2 border-charcoal flex items-center space-x-2">
-            <span>✉️</span> <span>say_hello.exe</span>
-          </button>
-          <div class="p-2 text-[10px] font-mono text-charcoal opacity-50 text-center">
-            Built with Vanilla JS & Tailwind
-          </div>
-        </div>
-      </div>
-
-      <!-- Center Running Tasks -->
-      <div id="taskbar-tasks" class="hidden md:flex items-center space-x-2 overflow-x-auto px-4 max-w-[50vw]">
-        <!-- Dynamic taskbar items will be injected here by JS -->
-      </div>
-
-      <!-- Right Side Utilities (Running Clock) -->
-      <div class="flex items-center space-x-3 bg-creamdark px-4 py-1.5 border-retro shadow-retro-sm text-xs font-mono">
-        <span class="text-charcoal opacity-70">UTC+2</span>
-        <span id="system-clock" class="font-bold text-charcoal">12:00:00 AM</span>
-      </div>
-
-    </footer>
-
-  </div>
-
-  <!-- Draggable Window Script & System Logic -->
-  <script>
-    // System Windows State
-    const windowIds = ['window-about', 'window-portfolio', 'window-universe', 'window-contact'];
-    let zIndexCounter = 50;
-
-    // Clock System
-    function updateClock() {
-      const clockElement = document.getElementById('system-clock');
-      if (clockElement) {
-        const now = new Date();
-        clockElement.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      }
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Toggle Retro Menu
-    function toggleMenu() {
-      const startMenu = document.getElementById('start-menu');
-      startMenu.classList.toggle('hidden');
-    }
-
-    // Close Menu if clicked outside
-    document.addEventListener('click', function(e) {
-      const menuBtn = document.getElementById('menu-btn');
-      const startMenu = document.getElementById('start-menu');
-      if (!menuBtn.contains(e.target) && !startMenu.contains(e.target)) {
-        startMenu.classList.add('hidden');
-      }
-    });
-
-    // Window Management Functions
-    function openWindow(id) {
-      const win = document.getElementById(id);
-      if (win) {
-        win.classList.add('active');
-        focusWindow(win);
-        updateTaskbar();
-      }
-    }
-
-    function menuOpenWindow(id) {
-      openWindow(id);
-      document.getElementById('start-menu').classList.add('hidden');
-    }
-
-    function closeWindow(id) {
-      const win = document.getElementById(id);
-      if (win) {
-        win.classList.remove('active');
-        updateTaskbar();
-      }
-    }
-
-    function minimizeWindow(id) {
-      const win = document.getElementById(id);
-      if (win) {
-        win.classList.remove('active');
-        updateTaskbar();
-      }
-    }
-
-    // Toggle maximize state
-    function toggleMaximize(id) {
-      const win = document.getElementById(id);
-      if (win) {
-        win.classList.toggle('maximized');
-      }
-    }
-
-    function focusWindow(win) {
-      // Remove focus from all windows
-      document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
-      // Increase zIndex counter and apply to focused window
-      zIndexCounter += 1;
-      win.style.zIndex = zIndexCounter;
-      win.classList.add('focused');
-    }
-
-    // Setup Window Events (Focus and Drag)
-    document.querySelectorAll('.window').forEach(win => {
-      // Focus on click
-      win.addEventListener('pointerdown', () => {
-        focusWindow(win);
-      });
-
-      // Draggable Header Setup
-      const header = win.querySelector('.window-header');
-      if (header) {
-        let isDragging = false;
-        let startX, startY;
-        let originalLeft, originalTop;
-
-        header.addEventListener('pointerdown', (e) => {
-          // Prevent drag if maximize window buttons or close buttons are clicked
-          if (e.target.classList.contains('window-btn')) return;
-          // Prevent dragging if window is maximized
-          if (win.classList.contains('maximized')) return;
-
-          isDragging = true;
-          focusWindow(win);
-          
-          // Get current window coordinates
-          const style = window.getComputedStyle(win);
-          originalLeft = parseFloat(style.left) || 0;
-          originalTop = parseFloat(style.top) || 0;
-
-          startX = e.clientX;
-          startY = e.clientY;
-
-          header.setPointerCapture(e.pointerId);
-          e.preventDefault();
-        });
-
-        header.addEventListener('pointermove', (e) => {
-          if (!isDragging) return;
-          const deltaX = e.clientX - startX;
-          const deltaY = e.clientY - startY;
-
-          // Apply boundaries check roughly
-          let newLeft = originalLeft + deltaX;
-          let newTop = originalTop + deltaY;
-
-          // Keep within reasonable viewport limits
-          if (newTop < 0) newTop = 0;
-          if (newTop > window.innerHeight - 80) newTop = window.innerHeight - 80;
-
-          win.style.left = `${newLeft}px`;
-          win.style.top = `${newTop}px`;
-        });
-
-        const stopDragging = (e) => {
-          if (isDragging) {
-            header.releasePointerCapture(e.pointerId);
-            isDragging = false;
-          }
+    <!-- Interactive Window Control & Bilingual Translation Logic Scripts -->
+    <script>
+        // Language Database Dictionary
+        const translations = {
+            fr: {
+                "menu-about": "À Propos",
+                "menu-fashion": "Mode & Collections",
+                "menu-universe": "Univers Personnel",
+                "title-about": "about_me.txt",
+                "title-fashion": "collections_archive.lnk",
+                "title-universe": "creative_universe.sys",
+                "heading-about": "Laura Garçon",
+                "bio-p1": "Après un double diplôme en relations internationales, j'ai choisi de suivre ma véritable passion : le design de mode. Mon parcours m'a menée de la France à Florence, en passant par la Corée du Sud.",
+                "bio-p2": "Ce portfolio reflète mon univers en constante évolution, mêlant structure technique et sensibilité artistique, une création à la fois.",
+                "heading-fashion": "Projets Mode",
+                "desc-dior": "Une collection capsule androgynne brouillant les frontières du genre, inspirée par l'élégance intemporelle de Dior et une vision contemporaine de l'identité.",
+                "desc-structure": "Exploration du vêtement comme architecture rigide d'un côté (inspiré des champignons), et comme flou psychologique et émotionnel déconstruit de l'autre.",
+                "heading-universe": "Crochet, Craft & Médias",
+                "desc-universe": "Au-delà de la mode académique, mon univers s'étend au fait-main, à la création textile expérimentale en crochet, et à la direction de contenu numérique."
+            },
+            en: {
+                "menu-about": "About Me",
+                "menu-fashion": "Fashion Portfolio",
+                "menu-universe": "Personal Universe",
+                "title-about": "about_me.txt",
+                "title-fashion": "collections_archive.lnk",
+                "title-universe": "creative_universe.sys",
+                "heading-about": "Laura Garçon",
+                "bio-p1": "Following a double degree in international affairs, I chose to pursue my true passion: fashion design. My artistic path has taken me from France to Florence, and immersive studies in South Korea.",
+                "bio-p2": "This web canvas reflects my evolving creative world—fusing technical structure with soft artistic storytelling, one design at a time.",
+                "heading-fashion": "Fashion Concepts",
+                "desc-dior": "An androgynous capsule collection blurring traditional gender lines, inspired by the classic house codes of Dior and a modern lens on human identity.",
+                "desc-structure": "An investigation of clothing as rigid architecture on one hand (inspired by organic mycelium structures), and emotional, fluid deconstruction on the other.",
+                "heading-universe": "Crochet, Craft & Media",
+                "desc-universe": "Beyond formal design, my creative expression extends to tactile yarn experiments, freeform crochet crafting, and modern digital platform curation."
+            }
         };
 
-        header.addEventListener('pointerup', stopDragging);
-        header.addEventListener('pointercancel', stopDragging);
+        let currentLang = 'fr';
 
-        // Double click to maximize
-        header.addEventListener('dblclick', (e) => {
-          if (e.target.classList.contains('window-btn')) return;
-          toggleMaximize(win.id);
-        });
-      }
-    });
-
-    // Update Bottom Taskbar Dynamic Items
-    function updateTaskbar() {
-      const container = document.getElementById('taskbar-tasks');
-      if (!container) return;
-      container.innerHTML = '';
-
-      windowIds.forEach(id => {
-        const win = document.getElementById(id);
-        if (win && win.classList.contains('active')) {
-          const title = win.querySelector('.window-header span').textContent.trim();
-          
-          // Create task button
-          const btn = document.createElement('button');
-          btn.className = `px-3 py-1 border-retro font-mono text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 shadow-retro-sm transition-all focus:outline-none ${win.classList.contains('focused') ? 'bg-pink' : 'bg-creamdark'}`;
-          btn.innerHTML = `<span>📂</span> <span>${title.toLowerCase()}</span>`;
-          btn.onclick = () => {
-            if (win.classList.contains('focused')) {
-              minimizeWindow(id);
+        function toggleLanguage() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            
+            // Re-render button display state
+            const toggleBtn = document.getElementById('lang-toggle');
+            if (currentLang === 'fr') {
+                toggleBtn.innerHTML = '<span class="font-bold">FR</span> <span class="opacity-40">|</span> EN';
             } else {
-              openWindow(id);
+                toggleBtn.innerHTML = 'FR <span class="opacity-40">|</span> <span class="font-bold">EN</span>';
             }
-          };
-          container.appendChild(btn);
+
+            // Loop through and update all dynamic text elements seamlessly
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                if (translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
         }
-      });
-    }
 
-    // Portfolio Tabs Switcher
-    function switchTab(tabName) {
-      // Hide all content blocks
-      document.querySelectorAll('.portfolio-tab-content').forEach(el => el.classList.add('hidden'));
-      // Show matching block
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        // Standard OS Modal Window Actions
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.remove('hidden');
+            // Bring newly opened window to the foreground stacking layer
+            document.querySelectorAll('.os-window').forEach(w => w.style.zIndex = "10");
+            win.style.zIndex = "50";
 
-      // Update tabs UI states
-      document.querySelectorAll('.portfolio-tab').forEach(el => {
-        el.classList.add('bg-creamdark', 'opacity-60');
-        el.classList.remove('bg-cream');
-      });
-      const activeTab = document.getElementById(`tab-btn-${tabName}`);
-      activeTab.classList.remove('bg-creamdark', 'opacity-60');
-      activeTab.classList.add('bg-cream');
-    }
+            const labels = {
+                'about-win': currentLang === 'fr' ? 'À Propos' : 'About Me',
+                'fashion-win': currentLang === 'fr' ? 'Mode & Collections' : 'Fashion Portfolio',
+                'universe-win': currentLang === 'fr' ? 'Univers Personnel' : 'Personal Universe'
+            };
+            document.getElementById('current-section-title').textContent = labels[id];
+        }
 
-    // Form Submission Handling
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
-
-      // Animate postcard success action
-      alert(`Thank you, ${name}! Your postcard is stamped and sent to the digital atelier archive.`);
-      e.target.reset();
-      closeWindow('window-contact');
-    }
-
-    // Initialize desktop layout configurations
-    window.addEventListener('DOMContentLoaded', () => {
-      // Adjust default window coordinates based on screen sizes
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        document.querySelectorAll('.window').forEach(win => {
-          win.style.left = '2.5vw';
-          win.style.top = '10%';
-          win.style.width = '95vw';
-        });
-      }
-      updateTaskbar();
-    });
-  </script>
+        function closeWindow(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById('current-section-title').textContent = currentLang === 'fr' ? 'Bienvenue' : 'Welcome to my world';
+        }
+    </script>
 </body>
 </html>
