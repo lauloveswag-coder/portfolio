@@ -1,242 +1,282 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laura Garçon — Portfolio</title>
-    <!-- Tailwind CSS for structural grid layouts -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Expressive editorial serif & clean UI mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&family=Syne:wght@700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- Linking directly to your separate style sheet -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap');
+:root {
+  --sage: #A7B89E;
+  --sage-light: #D2DDD0;
+  --cream: #FCFAF6;
+  --cream-dark: #F3EEE3;
+  --pink: #EBD6CD;
+  --pink-dark: #D7B9AE;
+  --purple: #E0D6E9;
+  --purple-dark: #C4B2D3;
+  --charcoal: #1E1E1E;
+  --border-width: 3px;
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cream-dark);
+  border-left: var(--border-width) solid var(--charcoal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--pink);
+  border: var(--border-width) solid var(--charcoal);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pink-dark);
+}
+body {
+  font-family: 'Space Mono', monospace;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+}
+/* Fonts styling */
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+.font-mono {
+  font-family: 'Space Mono', monospace;
+}
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+/* Paper noise texture */
+.bg-grain {
+  background-color: var(--cream);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+}
+/* Halftone pattern overlay */
+.bg-halftone {
+  background-image: radial-gradient(rgba(30, 30, 30, 0.15) 1.5px, transparent 1.5px);
+  background-size: 8px 8px;
+}
+/* Tactile Border & Shadow utilities */
+.border-retro {
+  border: var(--border-width) solid var(--charcoal);
+}
+.shadow-retro {
+  box-shadow: 6px 6px 0px var(--charcoal);
+}
+.shadow-retro-sm {
+  box-shadow: 3px 3px 0px var(--charcoal);
+}
+.shadow-retro-lg {
+  box-shadow: 12px 12px 0px var(--charcoal);
+}
+.shadow-retro-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.shadow-retro-hover:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px var(--charcoal);
+}
+.shadow-retro-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px var(--charcoal);
+}
+/* Desktop Icon Layout */
+.desktop-icon {
+  width: 100px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s ease;
+}
+.desktop-icon:hover {
+  transform: scale(1.05);
+}
+.desktop-icon:active {
+  transform: scale(0.95);
+}
+/* Draggable Windows */
+.window {
+  position: absolute;
+  min-width: 320px;
+  max-width: 95vw;
+  background: var(--cream);
+  border: var(--border-width) solid var(--charcoal);
+  box-shadow: 8px 8px 0px var(--charcoal);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+.window.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.window.focused {
+  z-index: 50;
+  box-shadow: 12px 12px 0px var(--charcoal);
+}
+.window-header {
+  background: var(--sage);
+  border-bottom: var(--border-width) solid var(--charcoal);
+  cursor: grab;
+  user-select: none;
+}
+.window-header:active {
+  cursor: grabbing;
+}
+/* Window buttons */
+.window-btn {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--charcoal);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+.window-btn-close { background: #FF5F56; }
+.window-btn-close:hover { background: #E0433C; }
+.window-btn-min { background: #FFBD2E; }
+.window-btn-min:hover { background: #DE9E16; }
+.window-btn-max { background: #27C93F; }
+.window-btn-max:hover { background: #1A9C2C; }
+/* Custom cursor style */
+.custom-cursor-grab {
+  cursor: grab;
+}
+.custom-cursor-grab:active {
+  cursor: grabbing;
+}
+/* Tactile Scrapbook Elements */
+.polaroid {
+  background: #FFFFFF;
+  border: 2px solid var(--charcoal);
+  box-shadow: 5px 5px 0px var(--charcoal);
+  padding: 12px 12px 32px 12px;
+  display: inline-block;
+  position: relative;
+  transition: transform 0.3s ease, z-index 0.3s ease;
+}
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05) !important;
+  z-index: 60;
+  box-shadow: 8px 8px 0px var(--charcoal);
+}
+.tape {
+  position: absolute;
+  background: rgba(246, 241, 225, 0.75);
+  backdrop-filter: blur(1px);
+  border-left: 1px dashed rgba(0, 0, 0, 0.15);
+  border-right: 1px dashed rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 4px 18px;
+  z-index: 10;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(30, 30, 30, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tape-top {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+}
+.tape-angle-left {
+  top: -10px;
+  left: -15px;
+  transform: rotate(-35deg);
+}
+.tape-angle-right {
+  top: -10px;
+  right: -15px;
+  transform: rotate(35deg);
+}
+/* Sticky note style */
+.sticky-note {
+  background: var(--purple);
+  border: var(--border-width) solid var(--charcoal);
+  box-shadow: 5px 5px 0px var(--charcoal);
+  padding: 16px;
+  position: relative;
+  transform: rotate(1deg);
+}
+/* Zine Marker Highlight Effect */
+.marker-highlight {
+  position: relative;
+  z-index: 1;
+}
+.marker-highlight::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: 0px;
+  width: calc(100% + 4px);
+  height: 55%;
+  background-color: var(--pink);
+  z-index: -1;
+  opacity: 0.75;
+  transform: skewX(-6deg);
+}
+.marker-highlight-purple::after {
+  background-color: var(--purple);
+}
+.marker-highlight-sage::after {
+  background-color: var(--sage-light);
+}
+/* Distressed/Rough paper edge lines using SVG borders or dashes */
+.dashed-outline {
+  border: 2px dashed var(--charcoal);
+}
+/* Maximize window animation class overrides */
+.window.maximized {
+  top: 10px !important;
+  left: 10px !important;
+  width: calc(100vw - 20px) !important;
+  height: calc(100vh - 75px) !important;
+  max-width: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Folder folder grid */
+.folder-label {
+  word-break: break-word;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.2;
+}
+/* Custom Animations */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(1deg); }
+  50% { transform: translateY(-5px) rotate(-1deg); }
+  100% { transform: translateY(0px) rotate(1deg); }
+}
+.float-effect {
+  animation: float 5s ease-in-out infinite;
+}
+/* Vector Star Rotation */
+@keyframes rotateStar {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.spin-star {
+  animation: rotateStar 10s linear infinite;
+}
+/* Responsive grid layouts */
+@media (max-width: 768px) {
+  .window {
+    min-width: 90vw !important;
+    max-width: 95vw !important;
+    left: 2.5vw !important;
+    width: 95vw !important;
+  }
+}
 
-    <!-- Retro OS Top Menu Bar -->
-    <div class="os-menu-bar">
-        <div class="flex items-center space-x-4">
-            <span class="font-bold tracking-wider">LAURA_OS v1.0</span>
-            <span class="hidden md:inline-block opacity-60">|</span>
-            <span class="hidden md:inline-block opacity-60" id="current-section-title">Welcome to my world</span>
-        </div>
-        <!-- The Bilingual Language Toggle Button -->
-        <button id="lang-toggle" onclick="toggleLanguage()" class="lang-btn">
-            <span class="font-bold">FR</span> <span class="opacity-40">|</span> EN
-        </button>
-    </div>
 
-    <!-- Main Interactive Desktop Area -->
-    <main class="desktop-environment">
-        
-        <!-- Grid of Zine/OS Desktop Icons (Sommaire) -->
-        <div class="desktop-grid">
-            <button class="desktop-icon-wrapper" onclick="openWindow('about-win')">
-                <div class="icon-folder bg-sage"></div>
-                <span class="icon-label" data-key="menu-about">À Propos</span>
-            </button>
 
-            <button class="desktop-icon-wrapper" onclick="openWindow('fashion-win')">
-                <div class="icon-folder bg-lavender"></div>
-                <span class="icon-label" data-key="menu-fashion">Mode & Collections</span>
-            </button>
 
-            <button class="desktop-icon-wrapper" onclick="openWindow('universe-win')">
-                <div class="icon-folder bg-pink"></div>
-                <span class="icon-label" data-key="menu-universe">Univers Personnel</span>
-            </button>
-        </div>
-
-        <!-- 1. À PROPOS POP-UP WINDOW -->
-        <div id="about-win" class="os-window hidden">
-            <div class="window-header bg-sage-light">
-                <div class="window-controls">
-                    <button class="dot dot-close" onclick="closeWindow('about-win')"></button>
-                    <button class="dot dot-min"></button>
-                    <button class="dot dot-max"></button>
-                </div>
-                <span class="window-title font-mono" data-key="title-about">about_me.txt</span>
-            </div>
-            <div class="window-content p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="space-y-4">
-                    <h2 class="text-3xl font-serif font-bold text-slate-800" data-key="heading-about">Laura Garçon</h2>
-                    <p class="font-sans text-slate-600 leading-relaxed" data-key="bio-p1">
-                        Après un double diplôme en relations internationales, j'ai choisi de suivre ma véritable passion : le design de mode. Mon parcours m'a menée de la France à Florence, en passant par la Corée du Sud.
-                    </p>
-                    <p class="font-sans text-slate-600 leading-relaxed" data-key="bio-p2">
-                        Ce portfolio reflète mon univers en constante évolution, mêlant structure technique et sensibilité artistique, une création à la fois.
-                    </p>
-                </div>
-                <!-- Layered Scrapbook Collage Style Image Block -->
-                <div class="relative flex justify-center items-center py-6">
-                    <div class="polaroid-frame rotate-2 shadow-md">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80" alt="Laura" class="w-full h-48 object-cover">
-                        <p class="font-serif italic text-center text-sm mt-2">Laura G. (Nancy, 2026)</p>
-                    </div>
-                    <div class="absolute -top-2 -left-2 vector-star text-pink-400 text-3xl">★</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. MODE & FASHION POP-UP WINDOW -->
-        <div id="fashion-win" class="os-window hidden">
-            <div class="window-header bg-lavender-light">
-                <div class="window-controls">
-                    <button class="dot dot-close" onclick="closeWindow('fashion-win')"></button>
-                    <button class="dot dot-min"></button>
-                    <button class="dot dot-max"></button>
-                </div>
-                <span class="window-title font-mono" data-key="title-fashion">collections_archive.lnk</span>
-            </div>
-            <div class="window-content p-6 space-y-8 max-h-[75vh] overflow-y-auto">
-                <h2 class="text-4xl font-serif font-bold text-center border-b pb-4 mb-4" data-key="heading-fashion">Projets Mode</h2>
-                
-                <!-- Dior Project Panel -->
-                <div class="border-2 border-slate-800 p-4 rounded bg-white relative">
-                    <h3 class="text-xl font-mono font-bold mb-2">01 / Costumes Dior</h3>
-                    <p class="text-slate-600 mb-4 text-sm" data-key="desc-dior">Une collection capsule androgynne brouillant les frontières du genre, inspirée par l'élégance intemporelle de Dior et une vision contemporaine de l'identité.</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm skew-x-1">
-                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm -rotate-2">
-                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm rotate-1">
-                        <img src="https://images.unsplash.com/photo-1445205170230-053b830c6038?auto=format&fit=crop&w=300&q=80" class="w-full h-32 object-cover rounded shadow-sm">
-                    </div>
-                </div>
-
-                <!-- MET Gala & Structure Project Panel -->
-                <div class="border-2 border-slate-800 p-4 rounded bg-white relative">
-                    <h3 class="text-xl font-mono font-bold mb-2">02 / Structure & Flou</h3>
-                    <p class="text-slate-600 mb-4 text-sm" data-key="desc-structure">Exploration du vêtement comme architecture rigide d'un côté (inspiré des champignons), et comme flou psychologique et émotionnel déconstruit de l'autre.</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="relative bg-cream-base p-2 border border-dashed border-slate-400">
-                            <span class="absolute top-1 left-1 text-xs font-mono opacity-50">[STRUCTURE]</span>
-                            <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=400&q=80" class="w-full h-40 object-cover mt-4">
-                        </div>
-                        <div class="relative bg-cream-base p-2 border border-dashed border-slate-400">
-                            <span class="absolute top-1 left-1 text-xs font-mono opacity-50">[FLOU]</span>
-                            <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80" class="w-full h-40 object-cover mt-4">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. UNIVERS PERSONNEL POP-UP WINDOW -->
-        <div id="universe-win" class="os-window hidden">
-            <div class="window-header bg-pink-light">
-                <div class="window-controls">
-                    <button class="dot dot-close" onclick="closeWindow('universe-win')"></button>
-                    <button class="dot dot-min"></button>
-                    <button class="dot dot-max"></button>
-                </div>
-                <span class="window-title font-mono" data-key="title-universe">creative_universe.sys</span>
-            </div>
-            <div class="window-content p-6 space-y-6">
-                <h2 class="text-3xl font-serif font-bold text-center" data-key="heading-universe">Crochet, Craft & Médias</h2>
-                <p class="text-center text-slate-600 font-sans max-w-xl mx-auto" data-key="desc-universe">
-                    Au-delà de la mode académique, mon univers s'étend au fait-main, à la création textile expérimentale en crochet, et à la direction de contenu numérique.
-                </p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-                    <div class="zine-card bg-white p-3 border-2 border-slate-800 rotate-1">
-                        <img src="https://images.unsplash.com/photo-1608748010899-18f300247112?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
-                        <h4 class="font-bold font-serif text-center">Handmade Craft</h4>
-                    </div>
-                    <div class="zine-card bg-white p-3 border-2 border-slate-800 -rotate-1">
-                        <img src="https://images.unsplash.com/photo-1621600411688-4be93cc685e4?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
-                        <h4 class="font-bold font-serif text-center">Digital Content</h4>
-                    </div>
-                    <div class="zine-card bg-white p-3 border-2 border-slate-800 rotate-2">
-                        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=300&q=80" class="w-full h-36 object-cover mb-2">
-                        <h4 class="font-bold font-serif text-center">Visual Identity</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Interactive Window Control & Bilingual Translation Logic Scripts -->
-    <script>
-        // Language Database Dictionary
-        const translations = {
-            fr: {
-                "menu-about": "À Propos",
-                "menu-fashion": "Mode & Collections",
-                "menu-universe": "Univers Personnel",
-                "title-about": "about_me.txt",
-                "title-fashion": "collections_archive.lnk",
-                "title-universe": "creative_universe.sys",
-                "heading-about": "Laura Garçon",
-                "bio-p1": "Après un double diplôme en relations internationales, j'ai choisi de suivre ma véritable passion : le design de mode. Mon parcours m'a menée de la France à Florence, en passant par la Corée du Sud.",
-                "bio-p2": "Ce portfolio reflète mon univers en constante évolution, mêlant structure technique et sensibilité artistique, une création à la fois.",
-                "heading-fashion": "Projets Mode",
-                "desc-dior": "Une collection capsule androgynne brouillant les frontières du genre, inspirée par l'élégance intemporelle de Dior et une vision contemporaine de l'identité.",
-                "desc-structure": "Exploration du vêtement comme architecture rigide d'un côté (inspiré des champignons), et comme flou psychologique et émotionnel déconstruit de l'autre.",
-                "heading-universe": "Crochet, Craft & Médias",
-                "desc-universe": "Au-delà de la mode académique, mon univers s'étend au fait-main, à la création textile expérimentale en crochet, et à la direction de contenu numérique."
-            },
-            en: {
-                "menu-about": "About Me",
-                "menu-fashion": "Fashion Portfolio",
-                "menu-universe": "Personal Universe",
-                "title-about": "about_me.txt",
-                "title-fashion": "collections_archive.lnk",
-                "title-universe": "creative_universe.sys",
-                "heading-about": "Laura Garçon",
-                "bio-p1": "Following a double degree in international affairs, I chose to pursue my true passion: fashion design. My artistic path has taken me from France to Florence, and immersive studies in South Korea.",
-                "bio-p2": "This web canvas reflects my evolving creative world—fusing technical structure with soft artistic storytelling, one design at a time.",
-                "heading-fashion": "Fashion Concepts",
-                "desc-dior": "An androgynous capsule collection blurring traditional gender lines, inspired by the classic house codes of Dior and a modern lens on human identity.",
-                "desc-structure": "An investigation of clothing as rigid architecture on one hand (inspired by organic mycelium structures), and emotional, fluid deconstruction on the other.",
-                "heading-universe": "Crochet, Craft & Media",
-                "desc-universe": "Beyond formal design, my creative expression extends to tactile yarn experiments, freeform crochet crafting, and modern digital platform curation."
-            }
-        };
-
-        let currentLang = 'fr';
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'fr' ? 'en' : 'fr';
-            
-            // Re-render button display state
-            const toggleBtn = document.getElementById('lang-toggle');
-            if (currentLang === 'fr') {
-                toggleBtn.innerHTML = '<span class="font-bold">FR</span> <span class="opacity-40">|</span> EN';
-            } else {
-                toggleBtn.innerHTML = 'FR <span class="opacity-40">|</span> <span class="font-bold">EN</span>';
-            }
-
-            // Loop through and update all dynamic text elements seamlessly
-            document.querySelectorAll('[data-key]').forEach(element => {
-                const key = element.getAttribute('data-key');
-                if (translations[currentLang][key]) {
-                    element.textContent = translations[currentLang][key];
-                }
-            });
-        }
-
-        // Standard OS Modal Window Actions
-        function openWindow(id) {
-            const win = document.getElementById(id);
-            win.classList.remove('hidden');
-            // Bring newly opened window to the foreground stacking layer
-            document.querySelectorAll('.os-window').forEach(w => w.style.zIndex = "10");
-            win.style.zIndex = "50";
-
-            const labels = {
-                'about-win': currentLang === 'fr' ? 'À Propos' : 'About Me',
-                'fashion-win': currentLang === 'fr' ? 'Mode & Collections' : 'Fashion Portfolio',
-                'universe-win': currentLang === 'fr' ? 'Univers Personnel' : 'Personal Universe'
-            };
-            document.getElementById('current-section-title').textContent = labels[id];
-        }
-
-        function closeWindow(id) {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById('current-section-title').textContent = currentLang === 'fr' ? 'Bienvenue' : 'Welcome to my world';
-        }
-    </script>
-</body>
-</html>
